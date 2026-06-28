@@ -1,0 +1,836 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Safety Seminar - Raipur Division</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f0f2f5;padding:20px}
+.container{max-width:900px;margin:0 auto;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.1)}
+.header{background:#003366;color:#fff;text-align:center;padding:20px 12px}
+.header h1{font-size:22px;font-weight:700;letter-spacing:2px}
+.header p{color:#FFD700;font-size:13px;font-weight:600;margin-top:5px}
+.section{padding:18px 22px}
+.section-title{font-size:13px;font-weight:700;color:#003366;background:#e8eef5;padding:8px 12px;border-left:4px solid #003366;margin-bottom:16px;border-radius:0 6px 6px 0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.field label{font-size:13px;font-weight:600;color:#333;margin-bottom:5px;display:block}
+.field label span{color:#e24b4a}
+input[type=text],input[type=date],select,textarea{width:100%;padding:9px 11px;font-size:13px;border:1px solid #ccc;border-radius:6px;background:#fff;color:#333;outline:none;font-family:Arial,sans-serif}
+input:focus,select:focus,textarea:focus{border-color:#003366;box-shadow:0 0 0 2px rgba(0,51,102,0.1)}
+textarea{resize:vertical;min-height:64px}
+hr{border:none;border-top:1px solid #e0e0e0}
+.add-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;font-size:13px;background:transparent;border:1px solid #999;border-radius:6px;cursor:pointer;color:#333;font-family:Arial,sans-serif}
+.add-btn:hover{background:#f0f2f5}
+.crew-table{width:100%;border-collapse:collapse;font-size:13px;table-layout:fixed}
+.crew-table th{background:#e8eef5;padding:9px 8px;text-align:left;font-weight:700;font-size:12px;color:#003366;border-bottom:1px solid #ccc}
+.crew-table td{padding:5px 4px;border-bottom:1px solid #eee;vertical-align:middle}
+.crew-table td input,.crew-table td select{font-size:12px;padding:6px 7px}
+.del-btn{background:none;border:none;cursor:pointer;color:#999;padding:4px 6px;border-radius:4px;font-size:16px;font-weight:700}
+.del-btn:hover{color:#e24b4a;background:#fdecea}
+.count-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:6px}
+.count-card{background:#e8eef5;border-radius:8px;padding:12px;text-align:center}
+.count-card .lbl{font-size:12px;color:#555;margin-bottom:4px;font-weight:600}
+.count-card .val{font-size:26px;font-weight:700;color:#003366}
+.total-line{font-size:13px;color:#555;margin-top:10px}
+.total-line strong{color:#003366}
+.submit-btn{width:100%;padding:12px;font-size:15px;font-weight:700;background:#003366;color:#fff;border:none;border-radius:8px;cursor:pointer;margin-top:6px;letter-spacing:1px}
+.submit-btn:hover{background:#004080}
+.pdf-btn{width:100%;padding:12px;font-size:15px;font-weight:700;background:#b8860b;color:#fff;border:none;border-radius:8px;cursor:pointer;margin-top:10px;letter-spacing:1px}
+.pdf-btn:hover{background:#a07800}
+.topic-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.topic-num{font-size:12px;color:#888;min-width:22px;text-align:right;font-weight:600}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <h1>&#9679; SAFETY SEMINAR &#9679;</h1>
+    <p>RAIPUR DIVISION &nbsp;&bull;&nbsp; SOUTH EAST CENTRAL RAILWAY</p>
+  </div>
+
+  <!-- Seminar Details -->
+  <div class="section">
+    <div class="section-title">&#128203; SEMINAR DETAILS</div>
+    <div class="grid2">
+      <div class="field">
+        <label>Date <span>*</span></label>
+        <input type="date" id="semDate">
+      </div>
+      <div class="field">
+        <label>Lobby <span>*</span></label>
+        <select id="lobby">
+          <option value="">-- Select Lobby --</option>
+          <option value="DBEC">DBEC</option>
+          <option value="DURG">DURG</option>
+          <option value="RAIPUR">RAIPUR</option>
+          <option value="DRZ">DRZ</option>
+          <option value="BYT">BYT</option>
+          <option value="RSD">RSD</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label>Conducted By <span>*</span></label>
+      <select id="conductedBy" onchange="toggleConductedByOther()">
+        <option value="">-- Select CLI --</option>
+        <option value="A K REDDY/CLI/R">A K REDDY/CLI/R</option>
+        <option value="A.R. TARAM/CLI/BIA">A.R. TARAM/CLI/BIA</option>
+        <option value="ABDUL MOIN KHAN/CLI/BIA">ABDUL MOIN KHAN/CLI/BIA</option>
+        <option value="AKHILESH KUMAR/CLI/BIA">AKHILESH KUMAR/CLI/BIA</option>
+        <option value="AMIT KUMAR BANKURE/CLI/BYT">AMIT KUMAR BANKURE/CLI/BYT</option>
+        <option value="ANANT PRAKASH SHRIVASTAVA/CLI/BIA">ANANT PRAKASH SHRIVASTAVA/CLI/BIA</option>
+        <option value="ANIL KUMAR/CLI/BIA">ANIL KUMAR/CLI/BIA</option>
+        <option value="ANKIT RAM KANT/CLI/BIA">ANKIT RAM KANT/CLI/BIA</option>
+        <option value="AVON KUMAR SAHU/CLI/R">AVON KUMAR SAHU/CLI/R</option>
+        <option value="ASHISH WANJARI/CLI/BYT">ASHISH WANJARI/CLI/BYT</option>
+        <option value="B B KUSHWAHA/CLI/BIA">B B KUSHWAHA/CLI/BIA</option>
+        <option value="B K HARMUKH/CLI/BIA">B K HARMUKH/CLI/BIA</option>
+        <option value="B. K. SAHA/CLI/BIA">B. K. SAHA/CLI/BIA</option>
+        <option value="B.K.SONI/CLI/BIA">B.K.SONI/CLI/BIA</option>
+        <option value="BHARAT SINGH ATBHAIYYA/CLI/R">BHARAT SINGH ATBHAIYYA/CLI/R</option>
+        <option value="BHOLI CHAUDHARY/CLI/R">BHOLI CHAUDHARY/CLI/R</option>
+        <option value="BIKRAMJIT KANRAR/CLI/BIA">BIKRAMJIT KANRAR/CLI/BIA</option>
+        <option value="BINOD KUMAR RAM/CLI/R">BINOD KUMAR RAM/CLI/R</option>
+        <option value="DEEPANNITA PUNTAMBEKAR/CLI/BIA">DEEPANNITA PUNTAMBEKAR/CLI/BIA</option>
+        <option value="DILLI RAO/CLI/BYT">DILLI RAO/CLI/BYT</option>
+        <option value="G. C. BISWAS/CLI/R">G. C. BISWAS/CLI/R</option>
+        <option value="G. V. R. K. MADHU/CLI/BIA">G. V. R. K. MADHU/CLI/BIA</option>
+        <option value="GIRDHARI LAL/CLI/R">GIRDHARI LAL/CLI/R</option>
+        <option value="JAISHANKAR SHARMA/CLI/BIA">JAISHANKAR SHARMA/CLI/BIA</option>
+        <option value="JITENDRA KUMAR MISHRA/CLI/BYT">JITENDRA KUMAR MISHRA/CLI/BYT</option>
+        <option value="K P LAHARE/CLI/R">K P LAHARE/CLI/R</option>
+        <option value="K P HIRWANI/CLI/BYT">K P HIRWANI/CLI/BYT</option>
+        <option value="K. K. SAHU/CLI/BIA">K. K. SAHU/CLI/BIA</option>
+        <option value="KHUSHAL SINGH/CLI/DRZ">KHUSHAL SINGH/CLI/DRZ</option>
+        <option value="KAMLESH KUMAR RAJABHOJ/CLI/BIA">KAMLESH KUMAR RAJABHOJ/CLI/BIA</option>
+        <option value="MAHESHWAR/CLI/BIA">MAHESHWAR/CLI/BIA</option>
+        <option value="MANOJ KUMAR SAO/CLI/R">MANOJ KUMAR SAO/CLI/R</option>
+        <option value="MANSUKH LAL CHANDRAKAR/CLI/R">MANSUKH LAL CHANDRAKAR/CLI/R</option>
+        <option value="MOHIT KUMAR SWARNKAR/CLI/BIA">MOHIT KUMAR SWARNKAR/CLI/BIA</option>
+        <option value="N. R. KARPAL/CLI/BIA">N. R. KARPAL/CLI/BIA</option>
+        <option value="N.K. BHOI/CLI/R">N.K. BHOI/CLI/R</option>
+        <option value="NITIN KUKDE/CLI/BYT">NITIN KUKDE/CLI/BYT</option>
+        <option value="NIRMAL KUMAR/CLI/BYT">NIRMAL KUMAR/CLI/BYT</option>
+        <option value="P.K. PATEL/CLI/BIA">P.K. PATEL/CLI/BIA</option>
+        <option value="PANKAJ KUMAR SINGH/CLI/BIA">PANKAJ KUMAR SINGH/CLI/BIA</option>
+        <option value="PAWAN KUMAR SINGH/CLI/BIA">PAWAN KUMAR SINGH/CLI/BIA</option>
+        <option value="PURAN LAL PATEL/CLI/BYT">PURAN LAL PATEL/CLI/BYT</option>
+        <option value="RAJENDRA KUMAR/CLI/BIA">RAJENDRA KUMAR/CLI/BIA</option>
+        <option value="PALAK RAM ALENDRA/CLI/DRZ">PALAK RAM ALENDRA/CLI/DRZ</option>
+        <option value="RAJESH KUMAR DESHMUKH/CLI/R">RAJESH KUMAR DESHMUKH/CLI/R</option>
+        <option value="RAJNEESH BENERJEE/CLI/BIA">RAJNEESH BENERJEE/CLI/BIA</option>
+        <option value="RANJEET SINGH/CLI/BYT">RANJEET SINGH/CLI/BYT</option>
+        <option value="RAKESH KUMAR KOSTA/CLI/DRZ">RAKESH KUMAR KOSTA/CLI/DRZ</option>
+        <option value="S K GAUTAM/CLI/BIA">S K GAUTAM/CLI/BIA</option>
+        <option value="S S HUSSAIN/CLI/BIA">S S HUSSAIN/CLI/BIA</option>
+        <option value="S. C. RAI/CLI/BIA">S. C. RAI/CLI/BIA</option>
+        <option value="S. K. SINGH/CLI/BIA">S. K. SINGH/CLI/BIA</option>
+        <option value="S. L. SONI/CLI/R">S. L. SONI/CLI/R</option>
+        <option value="SANJAY KUMAR ROY/CLI/BIA">SANJAY KUMAR ROY/CLI/BIA</option>
+        <option value="SANJAY SINGH/CLI/DRZ">SANJAY SINGH/CLI/DRZ</option>
+        <option value="SANJEEV KUMAR SHARMA/CLI/BIA">SANJEEV KUMAR SHARMA/CLI/BIA</option>
+        <option value="SANTOSH KUAMAR PATKAR/CLI/BIA">SANTOSH KUAMAR PATKAR/CLI/BIA</option>
+        <option value="SHAILENDRA SINGH/CLI/BIA">SHAILENDRA SINGH/CLI/BIA</option>
+        <option value="SUNDEEP KUMAR SHARMA/CLI/BIA">SUNDEEP KUMAR SHARMA/CLI/BIA</option>
+        <option value="SUNIL KUMAR DEWANGAN/CLI/BIA">SUNIL KUMAR DEWANGAN/CLI/BIA</option>
+        <option value="SURENDRA KUMAR SONI/CLI/BYT">SURENDRA KUMAR SONI/CLI/BYT</option>
+        <option value="SATYENDRA KUMAR/CLI/DRZ">SATYENDRA KUMAR/CLI/DRZ</option>
+        <option value="SANAT KUMAR SAHU/CLI/DRZ">SANAT KUMAR SAHU/CLI/DRZ</option>
+        <option value="V.K. BHAGAT/CLI/R">V.K. BHAGAT/CLI/R</option>
+        <option value="VIJAY KUMAR ARYA/CLI/BIA">VIJAY KUMAR ARYA/CLI/BIA</option>
+        <option value="VIKAS SHENDE/CLI/R">VIKAS SHENDE/CLI/R</option>
+        <option value="VINAY KUMAR VINCHURE/CLI/BIA">VINAY KUMAR VINCHURE/CLI/BIA</option>
+        <option value="VINAY PANTAWANE/CLI/BIA">VINAY PANTAWANE/CLI/BIA</option>
+        <option value="Y. RAMU/CLI/BIA">Y. RAMU/CLI/BIA</option>
+        <option value="YOGESH KUMAR MIHAULIA/CLI/BIA">YOGESH KUMAR MIHAULIA/CLI/BIA</option>
+        <option value="OTHERS">OTHERS</option>
+      </select>
+      <input type="text" id="conductedByOther" placeholder="Enter name" style="display:none;margin-top:8px">
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- Topics -->
+  <div class="section">
+    <div class="topics-header">
+      <div class="section-title" style="margin-bottom:0">&#128196; TOPICS OF SEMINAR</div>
+      <button class="add-btn" onclick="addTopic()">&#43; Add Topic</button>
+    </div>
+    <div id="topicsList"></div>
+  </div>
+
+  <hr>
+
+  <!-- Crew Table -->
+  <div class="section">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div class="section-title" style="margin-bottom:0">&#128101; CREW ATTENDANCE</div>
+      <button class="add-btn" onclick="addRow()">&#43; Add Crew</button>
+    </div>
+    <p id="crew-status" style="font-size:11px;color:#888;margin-bottom:8px">&#9203; Loading crew data from sheet...</p>
+    <div id="crew-manual-box" style="display:none;background:#fff8e1;border:1px solid #f0c040;border-radius:6px;padding:10px;margin-bottom:10px;font-size:12px">
+      <b style="color:#7a5800">&#128203; Paste JSON from Apps Script URL</b><br>
+      <span style="color:#555">Open the Apps Script URL in your browser, copy all text, paste below:</span><br>
+      <textarea id="crew-manual-input" rows="4" placeholder='Paste JSON here: [{"name":"JOHN","desig":"LP","hq":"R","cmsId":"1234"},...]' style="width:100%;margin-top:6px;font-size:11px;font-family:monospace;border:1px solid #ccc;border-radius:4px;padding:6px"></textarea>
+      <button onclick="loadManualJSON()" style="margin-top:6px;padding:5px 14px;background:#003366;color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:12px">&#10003; Load Crew Data</button>
+    </div>
+    <div style="overflow-x:auto;overflow-y:visible">
+      <table class="crew-table">
+        <thead>
+          <tr>
+            <th style="width:45px">S.No</th>
+            <th style="width:160px">Crew Name</th>
+            <th style="width:90px">Designation</th>
+            <th style="width:110px">HQ / Station</th>
+            <th style="width:100px;color:#b8860b">CMS ID</th>
+            <th style="width:40px"></th>
+          </tr>
+        </thead>
+        <tbody id="crewBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- Summary -->
+  <div class="section">
+    <div class="section-title">&#128202; ATTENDANCE SUMMARY</div>
+    <div class="count-grid">
+      <div class="count-card"><div class="lbl">LP</div><div class="val" id="cnt-LP">0</div></div>
+      <div class="count-card"><div class="lbl">ALP</div><div class="val" id="cnt-ALP">0</div></div>
+      <div class="count-card"><div class="lbl">TM</div><div class="val" id="cnt-TM">0</div></div>
+      <div class="count-card"><div class="lbl">OTHER</div><div class="val" id="cnt-OTHER">0</div></div>
+    </div>
+    <p class="total-line">Total Crew Attended: <strong id="cntTotal">0</strong></p>
+  </div>
+
+  <hr>
+
+  <!-- Submit -->
+  <div class="section">
+    <button class="submit-btn" onclick="submitForm()">&#10003; SUBMIT FORM</button>
+    <button class="pdf-btn" onclick="generatePDF()">&#128438; GENERATE PDF</button>
+  </div>
+
+</div>
+
+<script>
+// ── CREW DATA from Google Apps Script ──
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzav42mosXv8R9eqkO1eQxWbVXhkRfno0pZEAij8NjooiUW6_mjfaOnHlGJusejzjXF/exec';
+let crewData = [];
+let crewLoaded = false;
+
+function normalizeCrewRecord(c) {
+  var name = c.name || c.crewName || c.crew_name || c.CREW_NAME || c.Name || '';
+  var desig = c.desig || c.designation || c.Designation || c.DESIG || c.DESIGNATION || '';
+  var hq = c.hq || c.HQ || c.station || c.Station || c.STATION || '';
+  var cmsId = c.cmsId || c.cms_id || c.CMS_ID || c.cmsid || c.CMSID || c.cms || '';
+  return { name: String(name).trim(), desig: String(desig).trim(), hq: String(hq).trim(), cmsId: String(cmsId).trim() };
+}
+
+function processCrewData(data) {
+  var st = document.getElementById('crew-status');
+  if (!st) return;
+  try {
+    var raw = Array.isArray(data) ? data : (data.crew || data.data || data.records || []);
+    var normalized = raw.map(normalizeCrewRecord).filter(function(c) { return c.name; });
+    crewData = normalized;
+    crewLoaded = true;
+    st.innerHTML = '&#10003; ' + crewData.length + ' crew members loaded';
+    st.style.color = '#2a7a2a';
+    document.getElementById('crew-manual-box').style.display = 'none';
+    document.querySelectorAll('.crew-name-input').forEach(function(inp) {
+      inp.placeholder = 'Type or click to search...';
+    });
+  } catch(e) {
+    st.textContent = '\u26a0 Error: ' + e.message;
+    st.style.color = '#c0392b';
+  }
+}
+
+window.crewCallback = function(data) { processCrewData(data); };
+
+function loadCrewData() {
+  var st = document.getElementById('crew-status');
+  st.textContent = '⏳ Loading crew data...';
+  st.style.color = '#888';
+  crewLoaded = false;
+  document.getElementById('crew-manual-box').style.display = 'none';
+
+  // Method 1: JSONP via script tag
+  var old = document.getElementById('jsonp-crew-script');
+  if (old) old.parentNode.removeChild(old);
+
+  var script = document.createElement('script');
+  script.id = 'jsonp-crew-script';
+  script.src = APPS_SCRIPT_URL + '?callback=crewCallback&t=' + Date.now();
+  document.head.appendChild(script);
+
+  // Method 2: plain fetch fallback after 3 seconds
+  setTimeout(function() {
+    if (crewLoaded) return;
+    st.textContent = '⏳ Trying fetch method...';
+    fetch(APPS_SCRIPT_URL + '?t=' + Date.now())
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (!crewLoaded) processCrewData(data);
+      })
+      .catch(function() {
+        // Method 3: fetch with no-cors returns opaque, try with mode cors explicitly
+        fetch(APPS_SCRIPT_URL, { redirect: 'follow' })
+          .then(function(r) { return r.text(); })
+          .then(function(txt) {
+            if (crewLoaded) return;
+            // strip JSONP wrapper if present
+            var json = txt.replace(/^[^(]+\(/, '').replace(/\)\s*$/, '');
+            try { processCrewData(JSON.parse(json)); } catch(e) {}
+          })
+          .catch(function() {});
+      });
+  }, 3000);
+
+  // Final fallback after 20s
+  setTimeout(function() {
+    if (!crewLoaded) {
+      st.style.color = '#c0392b';
+      st.innerHTML = '⚠ Could not load crew automatically.' +
+        ' &nbsp;<button onclick="loadCrewData()" style="padding:3px 10px;background:#003366;color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:12px">↻ Retry</button>' +
+        ' &nbsp;<button onclick="showManualInput()" style="padding:3px 10px;background:#b8860b;color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:12px">📋 Paste JSON</button>';
+    }
+  }, 20000);
+}
+
+function showManualInput() {
+  document.getElementById('crew-manual-box').style.display = 'block';
+}
+
+function loadManualJSON() {
+  var txt = document.getElementById('crew-manual-input').value.trim();
+  try {
+    var data = JSON.parse(txt);
+    processCrewData(data);
+  } catch(e) {
+    alert('Invalid JSON: ' + e.message);
+  }
+}
+
+// ── Custom autocomplete ──
+function buildNameCell(tr) {
+  var wrapper = document.createElement('div');
+  wrapper.style.cssText = 'position:relative';
+
+  var inp = document.createElement('input');
+  inp.type = 'text';
+  inp.className = 'crew-name-input';
+  inp.placeholder = crewLoaded ? 'Type or click to search...' : 'Loading crew...';
+  inp.style.cssText = 'font-size:12px;padding:6px 7px;width:100%';
+  inp.autocomplete = 'off';
+
+  // Append dropdown to body to escape overflow:hidden/auto clipping
+  var dropdown = document.createElement('div');
+  dropdown.style.cssText = 'display:none;position:fixed;background:#fff;border:1px solid #003366;border-radius:0 0 6px 6px;max-height:200px;overflow-y:auto;z-index:99999;box-shadow:0 4px 12px rgba(0,0,0,0.2);min-width:220px';
+  document.body.appendChild(dropdown);
+
+  function positionDropdown() {
+    var rect = inp.getBoundingClientRect();
+    var ddH = dropdown.offsetHeight || 200;
+    dropdown.style.top = (rect.top + window.scrollY - ddH) + 'px';
+    dropdown.style.left = (rect.left + window.scrollX) + 'px';
+    dropdown.style.width = rect.width + 'px';
+    dropdown.style.borderRadius = '6px 6px 0 0';
+  }
+
+  wrapper.appendChild(inp);
+
+  function showOptions(filter) {
+    var q = (filter || '').toLowerCase().trim();
+    var matches = [];
+
+    if (!crewData.length) {
+      dropdown.innerHTML = '<div style="padding:8px 10px;color:#888;font-size:12px;font-style:italic">&#9203; Crew list loading... Type name manually</div>';
+      dropdown.style.display = 'block';
+      requestAnimationFrame(positionDropdown);
+      return;
+    }
+
+    matches = q
+      ? crewData.filter(function(c) { return c.name.toLowerCase().includes(q); })
+      : crewData.slice(0, 50);
+
+    var html = '';
+    if (!matches.length) {
+      html = '<div style="padding:8px 10px;color:#888;font-size:12px;font-style:italic">No match \u2014 type name manually</div>';
+    } else {
+      html = matches.map(function(c, i) {
+        return '<div data-i="'+i+'" style="padding:7px 10px;cursor:pointer;font-size:12px;border-bottom:1px solid #f0f0f0;color:#222" ' +
+          'onmousedown="event.preventDefault()" ' +
+          'onmouseover="this.style.background=\'#e8eef5\'" ' +
+          'onmouseout="this.style.background=\'#fff\'">' +
+          '<strong>' + c.name + '</strong>' +
+          '<span style="color:#888;font-size:11px;margin-left:8px">' + (c.desig||'') + (c.hq ? ' \u00b7 ' + c.hq : '') + '</span>' +
+          '</div>';
+      }).join('');
+    }
+    dropdown.innerHTML = html;
+    dropdown.querySelectorAll('div[data-i]').forEach(function(el) {
+      var idx = parseInt(el.getAttribute('data-i'));
+      el.addEventListener('mousedown', function() {
+        var match = matches[idx];
+        inp.value = match.name;
+        dropdown.style.display = 'none';
+        autoFillRow(tr, match);
+      });
+    });
+    dropdown.style.display = 'block';
+    requestAnimationFrame(positionDropdown);
+  }
+
+  inp.addEventListener('input', function() {
+    showOptions(this.value);
+    if (!this.value) clearAutoFill(tr);
+  });
+  inp.addEventListener('focus', function() {
+    showOptions(this.value);
+  });
+  inp.addEventListener('blur', function() {
+    setTimeout(function() { dropdown.style.display = 'none'; }, 200);
+  });
+  // Reposition on scroll or resize
+  window.addEventListener('scroll', function() {
+    if (dropdown.style.display !== 'none') positionDropdown();
+  }, true);
+  window.addEventListener('resize', function() {
+    if (dropdown.style.display !== 'none') positionDropdown();
+  });
+  inp.addEventListener('keydown', function(e) {
+    var items = dropdown.querySelectorAll('div');
+    var active = dropdown.querySelector('.ac-active');
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      var next = active ? active.nextElementSibling : items[0];
+      if (active) { active.classList.remove('ac-active'); active.style.background = '#fff'; }
+      if (next) { next.classList.add('ac-active'); next.style.background = '#e8eef5'; }
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      var prev = active ? active.previousElementSibling : items[items.length - 1];
+      if (active) { active.classList.remove('ac-active'); active.style.background = '#fff'; }
+      if (prev) { prev.classList.add('ac-active'); prev.style.background = '#e8eef5'; }
+    } else if (e.key === 'Enter' && active) {
+      e.preventDefault();
+      active.dispatchEvent(new Event('mousedown'));
+    } else if (e.key === 'Escape') {
+      dropdown.style.display = 'none';
+    }
+  });
+
+  // Store reference for cleanup when row is deleted
+  wrapper._dropdown = dropdown;
+
+  return wrapper;
+}
+
+function autoFillRow(tr, match) {
+  const cells = tr.querySelectorAll('td');
+  const desigSel = cells[2].querySelector('select');
+  if (desigSel) { desigSel.value = match.desig; updateCounts(); }
+  const hqSel = cells[3].querySelector('select');
+  if (hqSel) hqSel.value = match.hq;
+  const cmsInp = cells[4].querySelector('input');
+  if (cmsInp) cmsInp.value = match.cmsId;
+}
+
+function clearAutoFill(tr) {
+  const cells = tr.querySelectorAll('td');
+  const desigSel = cells[2].querySelector('select');
+  if (desigSel) { desigSel.value = ''; updateCounts(); }
+  const hqSel = cells[3].querySelector('select');
+  if (hqSel) hqSel.value = '';
+  const cmsInp = cells[4].querySelector('input');
+  if (cmsInp) cmsInp.value = '';
+}
+
+// Start fetching immediately
+loadCrewData();
+
+let topicCount = 0;
+
+function addTopic() {
+  topicCount++;
+  const div = document.createElement('div');
+  div.className = 'topic-row';
+  div.innerHTML =
+    '<span class="topic-num">' + topicCount + '.</span>' +
+    '<input type="text" placeholder="Enter topic ' + topicCount + '" style="flex:1">' +
+    '<button class="del-btn" onclick="removeTopic(this)" title="Remove">&#10005;</button>';
+  document.getElementById('topicsList').appendChild(div);
+}
+
+function removeTopic(btn) {
+  btn.closest('.topic-row').remove();
+  renumberTopics();
+}
+
+function renumberTopics() {
+  const items = document.querySelectorAll('#topicsList .topic-row');
+  topicCount = items.length;
+  items.forEach(function(item, i) {
+    item.querySelector('.topic-num').textContent = (i + 1) + '.';
+    item.querySelector('input').placeholder = 'Enter topic ' + (i + 1);
+  });
+}
+
+function addRow() {
+  const tbody = document.getElementById('crewBody');
+  const rowNum = tbody.rows.length + 1;
+  const tr = document.createElement('tr');
+  tr.innerHTML =
+    '<td style="text-align:center;color:#888;font-size:12px;font-weight:600" class="sno">' + rowNum + '</td>' +
+    '<td class="name-cell"></td>' +
+    '<td>' +
+      '<select onchange="updateCounts()">' +
+        '<option value="">-- Select --</option>' +
+        '<option value="LP">LP</option>' +
+        '<option value="ALP">ALP</option>' +
+        '<option value="LPG">LPG</option>' +
+        '<option value="SALP">SALP</option>' +
+        '<option value="SHT">SHT</option>' +
+        '<option value="SSHT">SSHT</option>' +
+        '<option value="TM">TM</option>' +
+        '<option value="OTHER">OTHER</option>' +
+      '</select>' +
+    '</td>' +
+    '<td><select><option value="">-- HQ --</option><option value="DBEC">DBEC</option><option value="DURG">DURG</option><option value="R">R</option><option value="RAIPUR">RAIPUR</option><option value="DRZ">DRZ</option><option value="BYT">BYT</option><option value="RSD">RSD</option></select></td>' +
+    '<td><input type="text" placeholder="CMS ID" style="color:#b8860b;font-weight:700;font-size:12px;padding:6px 7px" class="cms-id"></td>' +
+    '<td><button class="del-btn" onclick="removeRow(this)" title="Delete">&#128465;</button></td>';
+  tbody.appendChild(tr);
+  // Build the name dropdown into the name cell
+  const nameCell = tr.querySelector('.name-cell');
+  nameCell.appendChild(buildNameCell(tr));
+}
+
+function removeRow(btn) {
+  var row = btn.closest('tr');
+  // Clean up body-appended dropdown
+  var nameWrapper = row.querySelector('.name-cell > div');
+  if (nameWrapper && nameWrapper._dropdown) {
+    nameWrapper._dropdown.parentNode && nameWrapper._dropdown.parentNode.removeChild(nameWrapper._dropdown);
+  }
+  row.remove();
+  renumberRows();
+  updateCounts();
+}
+
+function renumberRows() {
+  const rows = document.querySelectorAll('#crewBody tr');
+  rows.forEach(function(r, i) {
+    r.querySelector('.sno').textContent = i + 1;
+  });
+}
+
+function updateCounts() {
+  var counts = {LP: 0, ALP: 0, TM: 0, OTHER: 0};
+  document.querySelectorAll('#crewBody tr').forEach(function(tr) {
+    // Only pick the designation select (first select in row = index 0)
+    const desigSel = tr.querySelectorAll('select')[0];
+    if (!desigSel || !desigSel.value) return;
+    const v = desigSel.value;
+    if (v === 'LP' || v === 'LPG') counts.LP++;
+    else if (v === 'ALP' || v === 'SALP') counts.ALP++;
+    else if (v === 'TM') counts.TM++;
+    else counts.OTHER++;
+  });
+  ['LP', 'ALP', 'TM', 'OTHER'].forEach(function(k) {
+    document.getElementById('cnt-' + k).textContent = counts[k];
+  });
+  document.getElementById('cntTotal').textContent =
+    counts.LP + counts.ALP + counts.TM + counts.OTHER;
+}
+
+function toggleConductedByOther() {
+  var sel = document.getElementById('conductedBy').value;
+  var otherInput = document.getElementById('conductedByOther');
+  otherInput.style.display = sel === 'OTHERS' ? 'block' : 'none';
+  if (sel !== 'OTHERS') otherInput.value = '';
+}
+
+function getConductedByValue() {
+  var sel = document.getElementById('conductedBy').value;
+  if (sel === 'OTHERS') return document.getElementById('conductedByOther').value.trim();
+  return sel;
+}
+
+async function submitForm() {
+  var d = document.getElementById('semDate').value;
+  var l = document.getElementById('lobby').value.trim();
+  var c = getConductedByValue();
+  if (!d || !l || !c) {
+    alert('Please fill in Date, Lobby, and Conducted By fields.');
+    return;
+  }
+
+  // Collect topics
+  var topics = [];
+  document.querySelectorAll('#topicsList .topic-row input').forEach(function(inp) {
+    if (inp.value.trim()) topics.push(inp.value.trim());
+  });
+
+  // Collect crew rows
+  var crew = [];
+  document.querySelectorAll('#crewBody tr').forEach(function(tr) {
+    var cells = tr.querySelectorAll('td');
+    var name = cells[1].querySelector('input') ? cells[1].querySelector('input').value.trim() : '';
+    var desig = cells[2].querySelector('select').value;
+    var hq = cells[3].querySelector('select').value;
+    var cmsId = cells[4].querySelector('input').value.trim();
+    if (name || desig || hq || cmsId) {
+      crew.push({ sno: tr.querySelector('.sno').textContent, name, desig, hq, cmsId });
+    }
+  });
+
+  // Summary counts
+  var lp  = parseInt(document.getElementById('cnt-LP').textContent);
+  var alp = parseInt(document.getElementById('cnt-ALP').textContent);
+  var tm  = parseInt(document.getElementById('cnt-TM').textContent);
+  var oth = parseInt(document.getElementById('cnt-OTHER').textContent);
+  var total = lp + alp + tm + oth;
+
+  var payload = {
+    formType: 'SAFETY_SEMINAR',
+    date: d,
+    lobby: l,
+    conductedBy: c,
+    topics: topics,
+    crew: crew,
+    summary: { LP: lp, ALP: alp, TM: tm, OTHER: oth, total: total }
+  };
+
+  // Disable button to prevent double-submit
+  var btn = document.querySelector('.submit-btn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Submitting...';
+
+  try {
+    const res = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' }, // GAS requires text/plain for CORS-free POST
+      body: JSON.stringify(payload)
+    });
+    const text = await res.text();
+    let msg = '';
+    try {
+      const json = JSON.parse(text);
+      msg = json.message || json.status || JSON.stringify(json);
+    } catch(_) { msg = text; }
+    alert('✅ Form submitted successfully!\n\n' + msg +
+          '\n\nDate: ' + d + ' | Lobby: ' + l +
+          '\nConducted By: ' + c +
+          '\nTotal Crew Attended: ' + total);
+    btn.textContent = '✓ SUBMITTED';
+  } catch(e) {
+    alert('❌ Submission failed: ' + e.message + '\n\nPlease check your connection and try again.');
+    btn.disabled = false;
+    btn.textContent = '✓ SUBMIT FORM';
+  }
+}
+
+// Init with one topic and one row
+addTopic();
+addRow();
+
+function formatDate(val) {
+  if (!val) return '';
+  var p = val.split('-');
+  return p[2] + '/' + p[1] + '/' + p[0];
+}
+
+function generatePDF() {
+  var d = document.getElementById('semDate').value;
+  var l = document.getElementById('lobby').value;
+  var c = getConductedByValue();
+  if (!d || !l || !c) {
+    alert('Please fill in Date, Lobby, and Conducted By fields before generating PDF.');
+    return;
+  }
+
+  // Collect topics
+  var topics = [];
+  document.querySelectorAll('#topicsList .topic-row input').forEach(function(inp) {
+    if (inp.value.trim()) topics.push(inp.value.trim());
+  });
+
+  // Collect crew
+  var crew = [];
+  document.querySelectorAll('#crewBody tr').forEach(function(tr) {
+    var cells = tr.querySelectorAll('td');
+    var name = cells[1].querySelector('input') ? cells[1].querySelector('input').value.trim() : '';
+    var desig = cells[2].querySelector('select').value;
+    var hq = cells[3].querySelector('select').value;
+    var cmsId = cells[4].querySelector('input').value.trim();
+    crew.push([tr.querySelector('.sno').textContent, name, desig, hq, cmsId]);
+  });
+
+  // Counts
+  var lp = parseInt(document.getElementById('cnt-LP').textContent);
+  var alp = parseInt(document.getElementById('cnt-ALP').textContent);
+  var tm = parseInt(document.getElementById('cnt-TM').textContent);
+  var oth = parseInt(document.getElementById('cnt-OTHER').textContent);
+  var total = lp + alp + tm + oth;
+
+  var { jsPDF } = window.jspdf;
+  var doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+  var pw = doc.internal.pageSize.getWidth();
+  var ph = doc.internal.pageSize.getHeight();
+  var ml = 12, mr = 12, mt = 10;
+  var cw = pw - ml - mr;
+
+  // ── HEADER ──
+  doc.setFillColor(0, 51, 102);
+  doc.rect(ml, mt, cw, 18, 'F');
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(14);
+  doc.setTextColor(255, 255, 255);
+  doc.text('SAFETY SEMINAR', pw / 2, mt + 7, { align: 'center' });
+  doc.setFontSize(9);
+  doc.setTextColor(255, 215, 0);
+  doc.text('RAIPUR DIVISION  \u2022  SOUTH EAST CENTRAL RAILWAY', pw / 2, mt + 13, { align: 'center' });
+
+  var y = mt + 24;
+
+  // ── SEMINAR DETAILS BOX ──
+  doc.setDrawColor(0, 51, 102);
+  doc.setLineWidth(0.3);
+  doc.setFillColor(232, 238, 245);
+  doc.rect(ml, y, cw, 7, 'F');
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(8);
+  doc.setTextColor(0, 51, 102);
+  doc.text('SEMINAR DETAILS', ml + 3, y + 4.5);
+  y += 9;
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(9);
+  doc.setTextColor(30, 30, 30);
+  var col1x = ml + 2, col2x = ml + cw / 2 + 2;
+  doc.setFont('helvetica', 'bold'); doc.text('Date:', col1x, y);
+  doc.setFont('helvetica', 'normal'); doc.text(formatDate(d), col1x + 18, y);
+  doc.setFont('helvetica', 'bold'); doc.text('Lobby:', col2x, y);
+  doc.setFont('helvetica', 'normal'); doc.text(l, col2x + 18, y);
+  y += 6;
+  doc.setFont('helvetica', 'bold'); doc.text('Conducted By:', col1x, y);
+  doc.setFont('helvetica', 'normal'); doc.text(c, col1x + 32, y);
+  y += 8;
+
+  // ── TOPICS ──
+  if (topics.length > 0) {
+    doc.setFillColor(232, 238, 245);
+    doc.rect(ml, y, cw, 7, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(8);
+    doc.setTextColor(0, 51, 102);
+    doc.text('TOPICS OF SEMINAR', ml + 3, y + 4.5);
+    y += 9;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor(30, 30, 30);
+    topics.forEach(function(t, i) {
+      doc.text((i + 1) + '.  ' + t, ml + 4, y);
+      y += 5.5;
+    });
+    y += 2;
+  }
+
+  // ── CREW TABLE ──
+  doc.setFillColor(232, 238, 245);
+  doc.rect(ml, y, cw, 7, 'F');
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(8);
+  doc.setTextColor(0, 51, 102);
+  doc.text('CREW ATTENDANCE', ml + 3, y + 4.5);
+  y += 7;
+
+  // Auto-scale font & row height to fit 20 rows on page
+  var remainH = ph - y - 48; // reserve space for summary + footer
+  var rowH = crew.length > 0 ? Math.min(8, Math.max(5, remainH / (crew.length + 1))) : 7;
+  var fontSize = crew.length > 15 ? 7 : 8;
+
+  doc.autoTable({
+    startY: y,
+    head: [['S.No', 'Crew Name', 'Designation', 'HQ / Station', 'CMS ID']],
+    body: crew,
+    margin: { left: ml, right: mr },
+    tableWidth: cw,
+    styles: { fontSize: fontSize, cellPadding: { top: 1.5, bottom: 1.5, left: 2, right: 2 }, textColor: [30, 30, 30], lineColor: [200, 200, 200], lineWidth: 0.2 },
+    headStyles: { fillColor: [0, 51, 102], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: fontSize },
+    alternateRowStyles: { fillColor: [245, 248, 252] },
+    columnStyles: { 0: { cellWidth: 12, halign: 'center' }, 1: { cellWidth: 'auto' }, 2: { cellWidth: 28, halign: 'center' }, 3: { cellWidth: 30, halign: 'center' }, 4: { cellWidth: 22, halign: 'center', textColor: [130, 90, 0], fontStyle: 'bold' } },
+    pageBreak: 'avoid',
+    rowPageBreak: 'avoid',
+  });
+
+  y = doc.lastAutoTable.finalY + 6;
+
+  // ── SUMMARY ──
+  doc.setFillColor(232, 238, 245);
+  doc.rect(ml, y, cw, 7, 'F');
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(8);
+  doc.setTextColor(0, 51, 102);
+  doc.text('ATTENDANCE SUMMARY', ml + 3, y + 4.5);
+  y += 9;
+
+  var boxW = (cw - 9) / 4;
+  var labels = ['LP', 'ALP', 'TM', 'OTHER'];
+  var vals = [lp, alp, tm, oth];
+  labels.forEach(function(lbl, i) {
+    var bx = ml + i * (boxW + 3);
+    doc.setFillColor(220, 230, 242);
+    doc.roundedRect(bx, y, boxW, 14, 2, 2, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(7);
+    doc.setTextColor(80, 80, 80);
+    doc.text(lbl, bx + boxW / 2, y + 4.5, { align: 'center' });
+    doc.setFontSize(13);
+    doc.setTextColor(0, 51, 102);
+    doc.text(String(vals[i]), bx + boxW / 2, y + 11, { align: 'center' });
+  });
+  y += 17;
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(9);
+  doc.setTextColor(30, 30, 30);
+  doc.text('Total Crew Attended: ' + total, ml + 2, y);
+
+  // ── SIGNATURE LINE ──
+  y += 10;
+  doc.setDrawColor(0, 51, 102);
+  doc.setLineWidth(0.4);
+  doc.line(pw - mr - 55, y, pw - mr, y);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(8);
+  doc.setTextColor(30, 30, 30);
+  doc.text('Signature & Stamp of CLI', pw - mr - 55, y + 4);
+
+  // ── FOOTER ──
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(7);
+  doc.setTextColor(150, 150, 150);
+  doc.text('Generated: ' + new Date().toLocaleString('en-IN'), ml, ph - 6);
+  doc.text('Page 1 of 1', pw - mr, ph - 6, { align: 'right' });
+
+  doc.save('Safety_Seminar_' + l + '_' + formatDate(d).replace(/\//g, '-') + '.pdf');
+}
+</script>
+
+</body>
+</html>
