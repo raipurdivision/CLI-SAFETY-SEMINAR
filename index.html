@@ -6,6 +6,7 @@
 
 
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -121,7 +122,7 @@ hr{border:none;border-top:1px solid #c8bfa8}
         <option value="KHUSHAL SINGH/CLI/DRZ">KHUSHAL SINGH/CLI/DRZ</option>
         <option value="KAMLESH KUMAR RAJABHOJ/CLI/BIA">KAMLESH KUMAR RAJABHOJ/CLI/BIA</option>
         <option value="MAHESHWAR/CLI/BIA">MAHESHWAR/CLI/BIA</option>
-        <option value="MANOJ KUMAR SAO/CLI/R">MANOJ KUMAR SAO/CLI/R</option>
+        <option value="MANOJ KUMAR SAO/CLI/BIA">MANOJ KUMAR SAO/CLI/BIA</option>
         <option value="MANSUKH LAL CHANDRAKAR/CLI/R">MANSUKH LAL CHANDRAKAR/CLI/R</option>
         <option value="MOHIT KUMAR SWARNKAR/CLI/BIA">MOHIT KUMAR SWARNKAR/CLI/BIA</option>
         <option value="N. R. KARPAL/CLI/BIA">N. R. KARPAL/CLI/BIA</option>
@@ -183,9 +184,17 @@ hr{border:none;border-top:1px solid #c8bfa8}
   <div class="section">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
       <div class="section-title" style="margin-bottom:0">&#128101; CREW ATTENDANCE</div>
-      <button class="add-btn" onclick="addRow()">&#43; Add Crew</button>
+      <div style="display:flex;gap:8px">
+        <button class="add-btn" onclick="toggleCmsLookup()">&#128269; Find by CMS ID</button>
+        <button class="add-btn" onclick="addRow()">&#43; Add Crew</button>
+      </div>
     </div>
     <p id="crew-status" style="font-size:11px;color:#2a7a2a;margin-bottom:8px">&#10003; 1766 crew members loaded</p>
+    <div id="cms-lookup-box" style="display:none;background:#eef4fb;border:1px solid #9cb8d8;border-radius:6px;padding:10px;margin-bottom:10px">
+      <b style="color:#003366;font-size:12px">&#128269; Reverse Lookup &mdash; type CMS ID to find matching crew</b>
+      <input type="text" id="cms-lookup-input" placeholder="Type CMS ID, e.g. DBEC3007" style="margin-top:6px;font-size:13px" oninput="cmsLookupSearch(this.value)">
+      <div id="cms-lookup-results" style="margin-top:8px;max-height:240px;overflow-y:auto;border-radius:6px"></div>
+    </div>
     <div id="crew-manual-box" style="display:none;background:#fff8e1;border:1px solid #f0c040;border-radius:6px;padding:10px;margin-bottom:10px;font-size:12px">
       <b style="color:#7a5800">&#128203; Paste JSON from Apps Script URL</b><br>
       <span style="color:#555">Open your deployed Apps Script URL in a browser, copy all text, paste below:</span><br>
@@ -475,6 +484,71 @@ function clearAutoFill(tr) {
 }
 
 // Crew data embedded from CSV - no fetch needed
+
+// ── CMS ID Reverse Lookup ──
+function toggleCmsLookup() {
+  var box = document.getElementById('cms-lookup-box');
+  var isHidden = box.style.display === 'none' || !box.style.display;
+  box.style.display = isHidden ? 'block' : 'none';
+  if (isHidden) {
+    var inp = document.getElementById('cms-lookup-input');
+    inp.value = '';
+    inp.focus();
+    cmsLookupSearch('');
+  }
+}
+
+function cmsLookupSearch(query) {
+  var resultsDiv = document.getElementById('cms-lookup-results');
+  var q = (query || '').toLowerCase().trim();
+
+  if (!crewData.length) {
+    resultsDiv.innerHTML = '<div style="padding:8px 10px;color:#888;font-size:12px;font-style:italic">&#9203; Crew list loading...</div>';
+    return;
+  }
+
+  if (!q) {
+    resultsDiv.innerHTML = '<div style="padding:8px 10px;color:#888;font-size:12px;font-style:italic">Start typing a CMS ID above...</div>';
+    return;
+  }
+
+  var matches = crewData.filter(function(c) {
+    return c.cmsId && c.cmsId.toLowerCase().includes(q);
+  }).slice(0, 50);
+
+  if (!matches.length) {
+    resultsDiv.innerHTML = '<div style="padding:8px 10px;color:#888;font-size:12px;font-style:italic">No matching CMS ID found</div>';
+    return;
+  }
+
+  resultsDiv.innerHTML = matches.map(function(c, i) {
+    return '<div data-i="' + i + '" class="cms-lookup-item" style="padding:8px 10px;cursor:pointer;font-size:12px;border-bottom:1px solid #d6e2ef;background:#fff" ' +
+      'onmouseover="this.style.background=\'#dce8f5\'" ' +
+      'onmouseout="this.style.background=\'#fff\'">' +
+      '<strong>' + c.name + '</strong>' +
+      '<span style="color:#b8860b;font-weight:700;margin-left:8px">' + c.cmsId + '</span>' +
+      '<span style="color:#888;font-size:11px;margin-left:8px">' + (c.desig || '') + (c.hq ? ' \u00b7 ' + c.hq : '') + '</span>' +
+      '</div>';
+  }).join('');
+
+  resultsDiv.querySelectorAll('.cms-lookup-item').forEach(function(el) {
+    var idx = parseInt(el.getAttribute('data-i'));
+    el.addEventListener('click', function() {
+      selectCmsLookupMatch(matches[idx]);
+    });
+  });
+}
+
+function selectCmsLookupMatch(match) {
+  // Add a new crew row and fill it with the selected member
+  addRow();
+  var rows = document.querySelectorAll('#crewBody tr');
+  var tr = rows[rows.length - 1];
+  var nameInp = tr.querySelector('.crew-name-input');
+  if (nameInp) nameInp.value = match.name;
+  autoFillRow(tr, match);
+  document.getElementById('cms-lookup-box').style.display = 'none';
+}
 
 let topicCount = 0;
 
